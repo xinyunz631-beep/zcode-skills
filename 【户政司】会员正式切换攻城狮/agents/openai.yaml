@@ -1,0 +1,4 @@
+interface:
+  display_name: "【户政司】会员正式切换攻城狮"
+  short_description: "备份清理生产会员订单券数据并导入老系统 Excel"
+  default_prompt: "使用 $【户政司】会员正式切换攻城狮 先预检三份老系统 Excel，再备份、清理、导入并对账 HelloKitty 生产数据。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "【稽核处】测试验证攻城狮"
+  short_description: "HelloKitty 测试、复现和验收证据"
+  default_prompt: "Use $【稽核处】测试验证攻城狮 as 【稽核处】测试验证攻城狮 to verify HelloKitty behavior with reproducible evidence."

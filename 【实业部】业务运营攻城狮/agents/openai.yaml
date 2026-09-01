@@ -1,0 +1,4 @@
+interface:
+  display_name: "【实业部】业务运营攻城狮"
+  short_description: "HelloKitty 业务配置和运营内容"
+  default_prompt: "Use $【实业部】业务运营攻城狮 as 【实业部】业务运营攻城狮 to check or update HelloKitty business configuration."

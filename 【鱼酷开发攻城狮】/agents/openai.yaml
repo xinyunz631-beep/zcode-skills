@@ -1,0 +1,4 @@
+interface:
+  display_name: "【鱼酷开发攻城狮】"
+  short_description: "鱼酷eos-pos后端代码、订单支付促销问题修复"
+  default_prompt: "Use $【鱼酷开发攻城狮】 as 【鱼酷开发攻城狮】 to debug or implement Yuku backend code in eos-pos."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "【DQ开发攻城狮】"
+  short_description: "DQ后端代码、下单促销、产品券问题修复"
+  default_prompt: "Use $【DQ开发攻城狮】 as 【DQ开发攻城狮】 to debug or implement DQ backend code in eos-dq."

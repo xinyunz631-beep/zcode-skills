@@ -1,0 +1,4 @@
+interface:
+  display_name: "【军令部】后端开发攻城狮"
+  short_description: "HelloKitty 后端代码、接口和业务逻辑"
+  default_prompt: "Use $【军令部】后端开发攻城狮 as 【军令部】后端开发攻城狮 to implement or debug HelloKitty backend code."

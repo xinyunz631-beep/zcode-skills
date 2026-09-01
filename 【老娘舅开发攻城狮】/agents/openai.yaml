@@ -1,0 +1,4 @@
+interface:
+  display_name: "【老娘舅开发攻城狮】"
+  short_description: "老娘舅eos-lnj后端和console-hg-master控制台代码、企迈/SAP/订单中心联调排障"
+  default_prompt: "Use $【老娘舅开发攻城狮】 as 【老娘舅开发攻城狮】 to debug or implement LNJ backend and control-side code."

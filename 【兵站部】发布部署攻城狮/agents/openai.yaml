@@ -1,0 +1,4 @@
+interface:
+  display_name: "【兵站部】发布部署攻城狮"
+  short_description: "HelloKitty 发布计划、部署和回滚"
+  default_prompt: "Use $【兵站部】发布部署攻城狮 as 【兵站部】发布部署攻城狮 to plan, deploy, or verify a HelloKitty release. Jenkins helper scripts live under this skill."

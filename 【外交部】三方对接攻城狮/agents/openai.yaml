@@ -1,0 +1,4 @@
+interface:
+  display_name: "【外交部】三方对接攻城狮"
+  short_description: "HelloKitty 三方接口、签名和 Nacos"
+  default_prompt: "Use $【外交部】三方对接攻城狮 as 【外交部】三方对接攻城狮 to implement or verify HelloKitty third-party integration."

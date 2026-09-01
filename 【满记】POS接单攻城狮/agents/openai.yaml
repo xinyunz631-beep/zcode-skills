@@ -1,0 +1,4 @@
+interface:
+  display_name: "【满记】POS接单攻城狮"
+  short_description: "满记POS外卖接单重构、MQ中转站、平台回调与灰度切流"
+  default_prompt: "Use $【满记】POS接单攻城狮 as 【满记】POS接单攻城狮 to design, implement, or verify the waimai POS 接单 MQ 中转站重构方案."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "【验票营】APK攻城狮"
+  short_description: "HelloKitty 核销 APK、Android 和商米终端"
+  default_prompt: "Use $【验票营】APK攻城狮 as 【验票营】APK攻城狮 to implement, build, or debug the HelloKitty verifier Android APK."

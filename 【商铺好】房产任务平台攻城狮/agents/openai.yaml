@@ -1,0 +1,4 @@
+interface:
+  display_name: "【商铺好】房产任务平台攻城狮"
+  short_description: "商铺好/房产任务平台 H5 演示,UAT 部署、/sph/api 接口、创蓝短信与控制台维护"
+  default_prompt: "Use $【商铺好】房产任务平台攻城狮 as 【商铺好】房产任务平台攻城狮 to develop, deploy, or verify the 商铺好 H5 demo and its /sph/api backend on HelloKitty UAT."

@@ -1,0 +1,7 @@
+interface:
+  display_name: "【密档司】生产访问攻城狮"
+  short_description: "Safe HelloKitty production access guide"
+  default_prompt: "Use $【密档司】生产访问攻城狮 as 【密档司】生产访问攻城狮 to inspect HelloKitty production middleware access safely."
+
+policy:
+  allow_implicit_invocation: true

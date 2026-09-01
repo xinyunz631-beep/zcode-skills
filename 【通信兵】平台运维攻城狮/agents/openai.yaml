@@ -1,0 +1,4 @@
+interface:
+  display_name: "【通信兵】平台运维攻城狮"
+  short_description: "HelloKitty 服务器、网络和运行时运维"
+  default_prompt: "Use $【通信兵】平台运维攻城狮 as 【通信兵】平台运维攻城狮 to inspect or fix HelloKitty runtime infrastructure."

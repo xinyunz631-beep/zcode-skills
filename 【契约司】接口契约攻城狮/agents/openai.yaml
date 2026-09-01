@@ -1,0 +1,7 @@
+interface:
+  display_name: "【契约司】接口契约攻城狮"
+  short_description: "匹配 hkp-admin 契约并补齐后端接口"
+  default_prompt: "Use $【契约司】接口契约攻城狮 as 【契约司】接口契约攻城狮 to match hkp-admin docs/codex contracts against the backend and close API gaps."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,4 @@
+interface:
+  display_name: "【泸溪河开发攻城狮】"
+  short_description: "负责泸溪河后端服务、管理端接口及前端页面日常开发、联调和故障排查"
+  default_prompt: "Use $【泸溪河开发攻城狮】 as 泸溪河开发攻城狮 to implement or debug Luxihe code."

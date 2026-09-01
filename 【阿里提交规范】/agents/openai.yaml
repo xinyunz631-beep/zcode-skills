@@ -1,0 +1,4 @@
+interface:
+  display_name: "【阿里提交规范】"
+  short_description: "Generate enterprise-style git commit messages."
+  default_prompt: "Use Alibaba-style commit format for this code change."

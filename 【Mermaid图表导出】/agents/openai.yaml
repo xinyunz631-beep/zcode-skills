@@ -1,0 +1,4 @@
+interface:
+  display_name: "【Mermaid图表导出】"
+  short_description: "Export Mermaid diagrams to PNG/SVG images"
+  default_prompt: "Use $【Mermaid图表导出】 to turn this Mermaid diagram into image files."

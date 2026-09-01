@@ -1,0 +1,6 @@
+interface:
+  display_name: "【户政司】老会员迁移攻城狮"
+  short_description: "老系统会员与资产迁移转换工具"
+  default_prompt: "Use $【户政司】老会员迁移攻城狮 as 【户政司】老会员迁移攻城狮 to convert old member Excel exports into HelloKitty CRM migration data."
+policy:
+  allow_implicit_invocation: true

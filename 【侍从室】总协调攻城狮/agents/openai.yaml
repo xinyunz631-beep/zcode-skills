@@ -1,0 +1,4 @@
+interface:
+  display_name: "【侍从室】总协调攻城狮"
+  short_description: "HelloKitty 任务分派和跨角色交接"
+  default_prompt: "Use $【侍从室】总协调攻城狮 as 【侍从室】总协调攻城狮 to route a HelloKitty task to the correct role."

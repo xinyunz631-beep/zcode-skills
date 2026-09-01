@@ -1,0 +1,4 @@
+interface:
+  display_name: "【账政司】数据库攻城狮"
+  short_description: "HelloKitty SQL、Mapper 和迁移规则"
+  default_prompt: "Use $【账政司】数据库攻城狮 as 【账政司】数据库攻城狮 to change HelloKitty SQL, MyBatis, or migrations safely."
