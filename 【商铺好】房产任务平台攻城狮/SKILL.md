@@ -28,7 +28,7 @@ The first user-facing sentence must start with:
 └── server/app.py                           # 后端:stdlib ThreadingHTTPServer + psycopg2
 ```
 
-前端固定调 `API = "/sph/api"`,带 `X-Token`;H5 手机框样式,角色页签:经纪人 / 拍摄达人 / 审核员;页面:home、shops、shop detail、agents、tasks、publish、review、stats、mine、auth;控制台在 `/ng/demo/shangpuhao/admin/`。
+前端固定调 `API = "/sph/api"`,带 `X-Token`;H5 手机框样式,角色页签:经纪人 / 拍摄达人(审核员已于 2026-09-05 移除);页面:home(仅 商品出租/拍摄任务/去发布 三入口)、shops、shop detail、agents、tasks、publish、mine、auth(仅手机短信验证,身份证流程已移除);review 与 stats 页面已删,审核收口到控制台;控制台在 `/ng/demo/shangpuhao/admin/`。**全部商铺均为「商品出租」类型,转让类型已下线(种子+发布接口都只出 rent)。**
 
 ## UAT 部署架构(HelloKitty UAT)
 

@@ -41,7 +41,7 @@ description: Use when the user asks for 小杨生煎 order-center history migrat
 
 11 张表：order_info、order_item、order_base_item、order_discount、order_payment、order_latest_status、order_member、sample_order_ids，及 focus 演示表 order_info_refund_focus_10、order_item_grill_focus_10、order_item_property_focus_10。CSV 一律 UTF-8 带 BOM，时间统一 `YYYY-MM-DD HH:MM:SS`。
 
-- 渠道：老 `channelId` → 新 `channel_id`：`2/3/6`→微信`1`（channelName 含 alipay→支付宝`2`）、`0/11`→POS`9`、`8`→美团`5`、`9`→饿了么`6`、`10`→京东`7`。`order_type`：外卖渠道=1、自取=2、堂食（POS 默认）=3。`brand_code=1`。
+- 渠道：老 `channelId` → 新 `channel_id`：`2/3/6`→微信`1`（channelName 含 alipay→支付宝`2`）、`0/11`→POS`9`、`8`→美团`5`、`9`→饿了么`4`、`10`→京东`7`。`order_type`：外卖渠道=1、自取=2、堂食（POS 默认）=3。`brand_code=1`。
 - 支付编码（`t_paymentinfo`）：微信`1050`、支付宝`1051`、现金`0`、点评`2011`、抖音`2054`、美团外卖`56`、饿了么外卖`57`、京东支付`55`、储值卡`64`；佣金 type：美团`2059`、饿了么`2060`、京东`2094`（不进 discount_tot）。`order_discount.reduce_fee = third_subsidy + merchant_subsidy`；佣金 `merchant_subsidy=reduce_fee`、`third_subsidy=0`。
 - 正单 `order_flag=1`、`order_status=4`；**仅退单成功（ios=97）才拆负向单** `order_flag=2`、`order_status=97`。退单中（ios=112/113）要导出正单，`order_latest_status=96`，但不拆负向单。refund_type：单笔=1、多笔中间=2、最后一笔=3。
 - **金额总账**：`order_tot_amt` 含配送费；`user_real_price = order_tot_amt - discount_tot_amt`，且逐单 = `order_payment.money` 合计。支付行来自老库 `t_orderitem.type=4`，`money=abs(coalesce(realPrice,price,0))`。
