@@ -78,6 +78,7 @@ DB:      UAT Postgres hellokitty_park,独立 schema shangpuhao,表 users/agents/
 - **nginx 备份文件放错位置**:`default.bak.*` 留在 `sites-enabled` 会直接 `nginx -t` 失败、reload 全挂;备份一律放 `/opt/hellokitty-park/ops-backups/`。
 - **页面必须逐页调接口**:列表/详情不许只靠首次拉取的本地缓存翻数据,用户会盯着 Network 面板验收,空请求=没调接口=返工。接口失败也不要静默落到写死种子数据。
 - **演示痕迹要清干净**:「演示填 123456」提示、写死验证码、假 token 一旦换成真实通道,页面上对应文案同步改掉。
+- **指引弹层只弹一次**(09-05 客户 George 反馈每次进都弹):localStorage + cookie `sph_guide_seen` 双保险(微信 webview 可能清 localStorage),点「知道了」双写;「再看一遍指引」按钮只渲染当次不落盘,避免改回 true 后每次都弹。指引文案口径由客户定稿:只做商业商铺商铺出租或出售/完成拍摄任务领取报酬/短信验证后发布。
 - **验收口径**:不是"截图能看",而是真实手机收到短信、真实登录跳转、真实入库+恢复种子后数量正确(6 店/4 经纪人)。
 
 ## Verification
