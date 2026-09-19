@@ -60,8 +60,12 @@ DB:      UAT Postgres hellokitty_park,独立 schema shangpuhao,表 users/agents/
 - 认证:`POST /api/auth/sms`(真实创蓝发送,6 位码入库,5 分钟 TTL,60 秒限流)、`POST /api/auth/verify`(只认库里的码,**123456 演示码已作废**)、`POST /api/auth/id`(本地 18 位校验,**未接公安核验**)、`GET /api/auth/me`
 - 控制台:admin 登录+图形验证码、商铺/经纪人/任务 CRUD 改状态、认证用户列表、恢复示例数据;全部要登录态
 
-短信(2026-09-05 起双通道,**腾讯云优先,创蓝中转兜底**):
-- **腾讯云 SMS**(用户买了套餐包,指定接入):`send_tencent_sms` 纯标准库 TC3-HMAC-SHA256 签名调 SendSms(2021-01-11),五项配置齐才启用:`TENCENT_SMS_SECRET_ID/SECRET_KEY/SDK_APP_ID/SIGN_NAME/TEMPLATE_ID` 全部只放服务器 env(chmod 600);未配齐自动回落创蓝中转。**首次接入卡点:用户给的 SecretID 只有 17 位(正常应为 AKID 开头约 36 位,复制被截断),且还需 SMS 控制台的 SdkAppId(1400 开头,应用管理页)+已审批签名+模板 ID;密钥有效性可用 DescribeSmsSignList/DescribeSmsTemplateList 验证**。TemplateParamSet=[code, 分钟数],按实际模板变量个数调。
+短信(**2026-09-19 终版:腾讯云市场网关,单通道**,创蓝/云SMS 两版历史方案全部作废):
+- 商品=云市场 18348「云市场通用短信(标准版)/短信验证码版」,用户 ¥8 体验装购买于 08-31(9-30 到期,实际额度仅约 5 条,控制台"0/5000"是售卖规格展示不可信)
+- **网关**:GET `https://market.cloud.tencent.com/market_order_dispatch/call`,公共参数 Action=sendSms/Nonce/Region=ap-guangzhou/SecretId/Signature/Timestamp/Version=2019-04-23,业务参数 phoneNumbers/signName/templateId/templateParam(JSON 字符串如 {"code":"123456"})
+- **签名**:除 Signature 外全部参数按 key 字典序拼 `k=v&`(值不编码),前缀 `GETmarket.cloud.tencent.com/market_order_dispatch/call?`,HMAC-SHA1(SecretKey) 后 base64,进 URL 时才 urlencode;签名文档=cloud.tencent.com/document/product/1138/49558
+- **账号配置**:签名「商铺好」(已通过)、模板 8516「您的验证码为{code},请于10分钟内输入…」(已通过);密钥=云市场密钥(17 位短 SecretID,**不是云 API 的 AKID,别再走 sms.tencentcloudapi.com 弯路**),配置在服务器 env:MARKET_SMS_SECRET_ID/SECRET_KEY/SIGN/TEMPLATE_ID
+- **实测已打通**(09-19 真发 5 条成功);**套餐耗尽后网关对该 SecretId 一律 nginx 403(浏览器直访问也 403,可据此排除代码问题),恢复=买正式套餐,同密钥直接生效,新订单若换密钥需更新 env**
 - **创蓝**:签名「安吉天使小镇乐园」,有 IP 白名单,UAT 走中转(health 里 relay:true)。凭证只放服务器 env。
 身份证公安核验未接(流程已整体下线)。
 
