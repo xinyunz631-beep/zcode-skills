@@ -60,7 +60,8 @@ DB:      UAT Postgres hellokitty_park,独立 schema shangpuhao,表 users/agents/
 - 认证:`POST /api/auth/sms`(真实创蓝发送,6 位码入库,5 分钟 TTL,60 秒限流)、`POST /api/auth/verify`(只认库里的码,**123456 演示码已作废**)、`POST /api/auth/id`(本地 18 位校验,**未接公安核验**)、`GET /api/auth/me`
 - 控制台:admin 登录+图形验证码、商铺/经纪人/任务 CRUD 改状态、认证用户列表、恢复示例数据;全部要登录态
 
-短信(**2026-09-19 深夜终版:三通道优先级 market(云市场18348) → tencent(官方SMS) → chuanglan(创蓝中转兜底)**):
+短信(**四通道优先级 market(云市场18348) → tencent(官方SMS) → juhe(聚合数据,09-19 深夜新增待用户实名充值) → chuanglan(创蓝中转兜底,当前在用)**):
+- **聚合数据路线(用户 09-19 选定,个人实名自助,无企业资质要求)**:juhe.cn 注册→实名→充值→「短信」创建/选用验证码模板(签名显示【聚合数据】)→拿 API Key+模板 ID;接口 `https://v.juhe.cn/sms/send?key=&mobile=&tpl_id=&tpl_value= urlencode({"#code#":code,"#minute#":minutes})`,error_code=0 即成功;env:JUHE_SMS_KEY/JUHE_SMS_TPL_ID;适配 send_juhe_sms 已上线等值
 - **云市场 18348(深智恒际,用户 09-19 又购 0元/30条试用,实例 market-5xzq20sd4)**:协议=POST `{content,phone_number,template_id}`(x-www-form-urlencoded),Authorization=JSON `{"id":SecretId,"x-date":GMT,"signature":base64(hmac-sha1(SecretKey,x-date))}`,头 request-id/X-Requested-With;正常返回 `{"request_id":"..","status":"OK"}`;**官方错误码:403=RATE_LIMIT_EXCEEDED(套餐不足/频率超限)**。**卡点:文档与商品页地址 `https://ap-beijing.cloudmarket-apigw.com/service-6pdxpyfd/data/send_sms` 均 301→market.cloud.tencent.com→404(Kong 无路由,疑服务重新部署);旧 PDF 地址 service-6pdxpyfd-1300075552.bj.apigw.tencentcs.com DNS 已死;待卖家(客服 18600814970/QQ 1422710446/电话 13821798270)提供当前可用地址并报备「商铺好」签名模板**。env:MARKET_SMS_URL(空=未启用)/SECRET_ID/SECRET_KEY/TEMPLATE_ID(先用调试模板 CST_ptdie100,content 占位 %{code})
 - **官方 SMS**:用户 Workbroock 个人账号签名/模板均为空(个人无法申请「商铺好」签名);签名「商铺好」+模板 2263601+SdkAppId 1400946740 属于**另一个账号(Westbrook?)**——若走官方需切到那个账号建密钥。密钥获取:cam/capi 新建→MFA 扫码→成功弹窗**下载 CSV**(SecretKey 仅展示一次,复制按钮会复制成图片不可靠);env:TENCENT_SMS_*(TC3 签名版 send_tencent_sms)
 - **创蓝中转**:health relay:true,当前兜底在用
