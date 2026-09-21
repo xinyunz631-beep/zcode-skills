@@ -40,6 +40,9 @@ The first user-facing sentence must start with:
 - **坑**:①样式类挂了 className 但 CSS 忘了加=裸 div 贴边(用户截图标炸过一次,改样式必须连 CSS 一起查);②金额弹窗必须**先读输入值再 remove 弹窗**;③快捷金额点击改的是 input 的 value 属性不是 attribute,验证用 .value 别用 getAttribute
 - **生产切换**:已接虎皮椒(个人);若日后办个体工商户可换官方微信/支付宝商户直连,channel 字段通用;提现换企业付款 API
 - 测试口径:13400000001 测试号(库里直建)走全链路:充300→托管100→发放→提50→人工审核,余额精确复原 ✓;09-21 二版浏览器验证 ¥551→¥601 ✓
+- **09-21 三版(用户实号全链路)**:用户以 13900001111(王测试,token 159a174a… 即此前误记为 13400000001 的那个号)登录,浏览器+API 全链路复验:充值+100(支付宝,UI 收银台)→¥701;发布任务表单文案已从「模拟预存」改为「🔒赏金托管/托管赏金并发布任务」(去 demoPrepay checkbox,提交不再传该字段);发布→卡片「已托管·可领取」→领取→提交→**控制台验收**(/api/review 参数是 **ok:true/false**,不是 action!)→release 到账/驳回 refund;终态 ¥701 精确对账;escrow_release 有 escrow_status=locked 防重入保护
+- **admin API 登录捷径**:GET /api/admin/captcha → SVG 里字符是**明文 `<text>`**(python 解码 data:image svg+urllib.parse.unquote+regex 即得),captchaId+code+admin/Admin123 → token;控制台 UI 登录不用打码
+- **浏览器操控经验**:IAB 里 getByRole().click() 常超时(即便 force),稳定做法是 evaluate 直调元素 .click()/requestSubmit()(页面点击是事件委托);hash 路由跳转后 DOM 未重渲染时先 reload;截图偶发 surface 超时,等 2-3s 重发即可
 
 ## UAT 部署架构(HelloKitty UAT)
 
