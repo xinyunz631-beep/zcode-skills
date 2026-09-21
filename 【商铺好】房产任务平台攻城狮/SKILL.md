@@ -30,6 +30,15 @@ The first user-facing sentence must start with:
 
 前端固定调 `API = "/sph/api"`,带 `X-Token`;H5 手机框样式,**无角色概念**(09-05 George 定稿:顶部经纪人/拍摄达人页签已取消,用户=手机号登记,想当经纪人自己加资料,想赚拍摄钱去任务大厅领任务;领任务人显示手机号掩码);页面:home(仅 商铺出租/拍摄任务/经纪人资料 三入口,去发布只在底部 tab)、shops、shop detail、agents(标题"经纪人资料",有"＋新增经纪人资料"按钮跳 #/publish?tab=agent)、tasks、publish(支持 ?tab=house|task|agent 直达,三表单均手机验证后开放)、mine、auth(仅手机短信验证,身份证流程已移除);review 与 stats 页面已删,审核收口到控制台;控制台在 `/ng/demo/shangpuhao/admin/`。**全部商铺均为「商铺出租」类型,转让类型已下线(种子+发布接口都只出 rent);命名口径是"商铺出租"不是"商品出租"(09-05 客户看过效果后纠正)。**
 
+## 钱包与赏金托管(09-21 上线,演示版)
+
+- **模型**:发布者充值(模拟收银台,微信/支付宝双 UI)→ 发任务冻结赏金(escrow)→ 验收通过自动结算给领取人(release)/驳回退回(refund)→ 提现申请(控制台人工确认打款,驳回自动退余额)
+- **表**:wallets(balance/frozen)、wallet_flows(recharge/escrow/release/refund/withdraw+channel+status)、tasks 加 escrow_status/claim_user_id/publisher_user_id
+- **API**:/api/wallet(GET 余额流水)、/api/wallet/recharge、/api/wallet/withdraw、/api/admin/wallet/withdraws(GET)+/api/admin/wallet/withdraw/{id}(POST approve→done/驳回退款);发布任务余额校验在前、插入后冻结;领取时记 claim_user_id(需登录)
+- **坑**:金额弹窗必须**先读输入值再 remove 弹窗**(先 remove 后读=静默校验失败)
+- **生产切换**:收银台替换为官方商户支付链接(个体工商户资质),channel 字段已预留;提现换企业付款 API
+- 测试口径:13400000001 测试号(库里直建)走全链路:充300→托管100→发放→提50→人工审核,余额精确复原 ✓
+
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
