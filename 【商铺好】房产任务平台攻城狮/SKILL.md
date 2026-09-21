@@ -46,6 +46,7 @@ The first user-facing sentence must start with:
 - **09-21 六版(一键拉起支付宝)**:个人收款码解码出的 `https://qr.alipay.com/xxx` 链接,H5 里 a 标签直跳即可在手机上唤起支付宝直达转账页(个人码**不能带金额参数**;固定金额需在支付宝生成"设置金额的收款码"一码一额);微信无外部拉起(官方封禁,仅商户JSAPI)。实现:settings 加 alipay_link(控制台支付设置输入框,非 qr.alipay.com 开头保存前 confirm);openQrSheet 支付宝通道且配了链接→金色大按钮「🚀一键拉起支付宝转账」+提示返回自动刷新;sheet 打开即刷新 CACHE.wallet 并 startWalletPolling(pending/reviewing 都算未完成,余额增加时 toast「充值已到账✓」)。**转账成功检测仍只有安卓推送**(个人转账无任何网页回调,跳转只是省去扫码步骤)
 - **收款账号显示(09-21)**:settings payeeName/payeeNote;H5 优先级 收款人:name(note) > 收款账号:note > 默认文案;用户收款账号=支付宝 15366055126(payeeName 留空走收款账号分支)
 - **支付宝拉起双模式(09-21)**:alipayLink 未配时按钮仍显示,跳通用转账 scheme `alipays://platformapi/startapp?appId=09999988&actionType=toAccount`(拉起支付宝转账页,用户输收款手机号;payeeNote 里正则提取手机号,展示为「收款账号:153… 点击复制」copy-payee 按钮);配了真码链接则按钮升级为直达转账页(免输手机号);微信内点击拦截提示浏览器打开;jump-alipay/copy-payee 均 data-act 分发。坑:IAB 里页面被用户导航到别域后 evaluate 访问 localStorage 报 SecurityError,先 goto 回本域再操作
+- **真实收款码已上线(09-21)**:用户发收款码截图→Vision VNDetectBarcodesRequest 解码(swift /tmp/qr.swift,payload=qr.alipay.com/fkx…,去 ?t= 时间戳参数)→boundingBox 裁码图(左下原点坐标换算:y_px=H-y_bb-h_bb,扩12%白边,swift /tmp/crop.swift)→settings 存 alipayLink+qrAlipay(base64 PNG 175KB);按钮自动升级「一键拉起支付宝转账」直达转账页免输手机号
 - **拿收款码链接指引**:支付宝App→收付款→二维码收款→保存图片→微信扫一扫选相册识别(或草料在线解码)→复制 https://qr.alipay.com/xxx→控制台支付设置粘贴
 - **安卓端配置**(给用户):旧安卓机保持支付宝+微信登录开通知→装 MacroDroid/通知转发类 App→触发=支付宝|微信新通知→动作 HTTP POST 上面的 push 接口 body 带完整 token+通知文本;iOS 不可行(快捷指令读不了通知内容,收款无短信)
 - **平行操作提醒**:用户常在另一设备同时操作同一测试号(09-21 08:06 自测充值/提现),对不上账先查 wallet_flows 全表再下结论
