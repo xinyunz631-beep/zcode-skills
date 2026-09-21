@@ -44,6 +44,7 @@ The first user-facing sentence must start with:
 - **admin API 登录捷径**:GET /api/admin/captcha → SVG 里字符是**明文 `<text>`**(python 解码 data:image svg+urllib.parse.unquote+regex 即得),captchaId+code+admin/Admin123 → token;控制台 UI 登录不用打码
 - **09-21 五版(到账自动检测)**:个人身份无官方回调 API;唯一现实自动检测=**安卓挂机转发收款通知**。已实现服务端:POST /api/wallet/notify/push {token(PAY_PUSH_TOKEN env,ssh grep 取), source:alipay|wxpay|auto, text:通知原文} → 正则提金额([¥￥]x 优先,「收款/转账/收到 x元」兜底)→ 90 分钟窗口内 status IN(pending,reviewing) AND amount AND channel 匹配 → **恰好1笔才自动入账**(条件 UPDATE…RETURNING 占位防并发重复),多笔/0笔返回 auto:false 留人工;已验证:唯一自动入账✓/同金额2笔转人工✓/重复推送无匹配✓/错token拒绝✓
 - **09-21 六版(一键拉起支付宝)**:个人收款码解码出的 `https://qr.alipay.com/xxx` 链接,H5 里 a 标签直跳即可在手机上唤起支付宝直达转账页(个人码**不能带金额参数**;固定金额需在支付宝生成"设置金额的收款码"一码一额);微信无外部拉起(官方封禁,仅商户JSAPI)。实现:settings 加 alipay_link(控制台支付设置输入框,非 qr.alipay.com 开头保存前 confirm);openQrSheet 支付宝通道且配了链接→金色大按钮「🚀一键拉起支付宝转账」+提示返回自动刷新;sheet 打开即刷新 CACHE.wallet 并 startWalletPolling(pending/reviewing 都算未完成,余额增加时 toast「充值已到账✓」)。**转账成功检测仍只有安卓推送**(个人转账无任何网页回调,跳转只是省去扫码步骤)
+- **收款账号显示(09-21)**:settings payeeName/payeeNote;H5 优先级 收款人:name(note) > 收款账号:note > 默认文案;用户收款账号=支付宝 15366055126(payeeName 留空走收款账号分支)
 - **拿收款码链接指引**:支付宝App→收付款→二维码收款→保存图片→微信扫一扫选相册识别(或草料在线解码)→复制 https://qr.alipay.com/xxx→控制台支付设置粘贴
 - **安卓端配置**(给用户):旧安卓机保持支付宝+微信登录开通知→装 MacroDroid/通知转发类 App→触发=支付宝|微信新通知→动作 HTTP POST 上面的 push 接口 body 带完整 token+通知文本;iOS 不可行(快捷指令读不了通知内容,收款无短信)
 - **平行操作提醒**:用户常在另一设备同时操作同一测试号(09-21 08:06 自测充值/提现),对不上账先查 wallet_flows 全表再下结论
