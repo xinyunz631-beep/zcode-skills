@@ -61,6 +61,12 @@ The first user-facing sentence must start with:
 - **头像上传**:users 加 avatar 列(ALTER IF NOT EXISTS);POST /api/auth/profile {avatar: dataURL≤300KB} 校验 data:image/ 前缀存库,user_row 返回;前端 pageMine 头像改 .ava-btn(右上「改」角标)+hidden file input→compressPhoto→/auth/profile→render;bindMine 防重复绑定(inp.dataset.bound)
 - **验证页改版(修"短信码被搞没了")**:原逻辑 smsOk 后隐藏验证码行只显示已验证文案,用户以为短信功能没了;改版后**短信表单常驻**——已验证时顶部绿字「当前已验证:xxx」+按钮变「换绑到新手机号」+新增「退出登录」按钮(data-act=logout:清 store.auth+CACHE.wallet→go #/auth);验证成功后跳 #/mine 不再跳发布页
 - **经验**:用户口述"XX没了/坏了"多半是状态分支把功能藏了,先查条件渲染;浏览器截图红色批注=验收意见,逐条改
+## 经纪人资料本人化+视口适配(09-29 二)
+
+- **用户需求**:经纪人资料只有本人可见(不看全部名单),未注册引导注册;我的页大留白适配
+- **实现**:agents 加 user_id 列;POST /api/agents 改 **upsert**(有 user_id 记录则 UPDATE 同 ID);GET /api/agents/mine(token→user_id→agent 或 null,**必须放在 startswith("/api/agents/") 通配之前**,否则 mine 被当 id 报"经纪人不存在");pageAgents 三态:未验证→引导去验证;已验证未注册→注册表单;已注册→资料卡+预填编辑(保存即 upsert);不再展示经纪人列表
+- **适配根因**:手机 CSS 视口宽 494px>430 断点,走了桌面壳(390px 手机框+垂直居中)→大留白;修:@media max-width 430→**520**,.stage min-height 100dvh,.phone height min(844px,100dvh-48px)+min-height 560px,移动块 .phone height 100dvh
+- **坑**:前端注入 token 验证时别用 `'x'.slice(0,0) || old` 这种表达式(等号坑),直接传完整 token;测试注册数据记得清库
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
