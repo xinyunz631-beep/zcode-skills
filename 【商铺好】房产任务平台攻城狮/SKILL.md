@@ -55,6 +55,12 @@ The first user-facing sentence must start with:
 - **官方 API 真相(给用户的话)**:微信支付/支付宝官方商户 API 均需营业执照(个体工商户/企业),个人无法开通;办个体户(线上1-3天免费)后可开支付宝当面付+微信普通商户(费率0.6%),现有 channel/payUrl/回调抽象可直接切换
 - **浏览器操控经验**:IAB 里 getByRole().click() 常超时(即便 force),稳定做法是 evaluate 直调元素 .click()/requestSubmit()(页面点击是事件委托);hash 路由跳转后 DOM 未重渲染时先 reload;截图偶发 surface 超时,等 2-3s 重发即可
 
+## 账号体系完善(09-29,用户反馈三连)
+
+- **我的页精简**:删掉 发布商铺/发布拍摄任务/控制台维护/清空演示数据/再看一遍演示指引 菜单(用户要求隐藏),只留 钱包/手机号验证·退出登录/经纪人资料
+- **头像上传**:users 加 avatar 列(ALTER IF NOT EXISTS);POST /api/auth/profile {avatar: dataURL≤300KB} 校验 data:image/ 前缀存库,user_row 返回;前端 pageMine 头像改 .ava-btn(右上「改」角标)+hidden file input→compressPhoto→/auth/profile→render;bindMine 防重复绑定(inp.dataset.bound)
+- **验证页改版(修"短信码被搞没了")**:原逻辑 smsOk 后隐藏验证码行只显示已验证文案,用户以为短信功能没了;改版后**短信表单常驻**——已验证时顶部绿字「当前已验证:xxx」+按钮变「换绑到新手机号」+新增「退出登录」按钮(data-act=logout:清 store.auth+CACHE.wallet→go #/auth);验证成功后跳 #/mine 不再跳发布页
+- **经验**:用户口述"XX没了/坏了"多半是状态分支把功能藏了,先查条件渲染;浏览器截图红色批注=验收意见,逐条改
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
