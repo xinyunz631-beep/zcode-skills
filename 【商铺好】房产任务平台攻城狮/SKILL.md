@@ -74,6 +74,12 @@ The first user-facing sentence must start with:
 - **存储**:verify 落库 role;POST /api/auth/profile 也接受 role(我的页随时切换);user_row 返回 role
 - **我的页**:身份徽标(经纪人绿/拍摄蓝/未选金色"选择身份›"链到验证页);发布页对 shooter 显示轻提示(去任务大厅接单/切换身份入口)——软引导不封锁功能,避免破坏现有流程
 - **注意**:文档 click 委托里 data-role 处理要放在 data-act 为空分支(选择卡不是 data-act)
+## 清库重走(10-04,用户要自己走全流程)
+
+- **init_db 只在 agents 表空时灌种子**→清库后必须禁:env 加 **SPH_NO_SEEDS=1**(init_db 检查),否则一重启演示数据全回来
+- 清库顺序:wallet_flows→wallets→uploads→sms_codes→users→tasks→shops→agents(admins 保留);控制台概览「恢复示例」按钮点了会重新灌种子,提醒用户别点
+- **阿里短信 UNKNOWN≠服务挂**:对虚拟/异常号段(如 13800009999)直接拒发 UNKNOWN;真实号码(153/134)同一时刻发送 OK。排障先用真实手机号测
+- env sourcing 坑:server 上 `. env` 会执行到 /usr/bin/env 二进制报错,必须 `. ./env`
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
