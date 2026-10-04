@@ -67,6 +67,13 @@ The first user-facing sentence must start with:
 - **实现**:agents 加 user_id 列;POST /api/agents 改 **upsert**(有 user_id 记录则 UPDATE 同 ID);GET /api/agents/mine(token→user_id→agent 或 null,**必须放在 startswith("/api/agents/") 通配之前**,否则 mine 被当 id 报"经纪人不存在");pageAgents 三态:未验证→引导去验证;已验证未注册→注册表单;已注册→资料卡+预填编辑(保存即 upsert);不再展示经纪人列表
 - **适配根因**:手机 CSS 视口宽 494px>430 断点,走了桌面壳(390px 手机框+垂直居中)→大留白;修:@media max-width 430→**520**,.stage min-height 100dvh,.phone height min(844px,100dvh-48px)+min-height 560px,移动块 .phone height 100dvh
 - **坑**:前端注入 token 验证时别用 `'x'.slice(0,0) || old` 这种表达式(等号坑),直接传完整 token;测试注册数据记得清库
+## 身份体系(09-29 三,用户要求授权时选身份)
+
+- **两种身份**:agent=经纪人(发商铺/发任务/托管赏金)、shooter=拍摄的人(领任务/拍摄/赚佣金);users 加 role 列
+- **验证页**:顶部两张身份卡(data-role 点击→store.auth.role+save+render,选中墨绿反白),验证提交必须带 role(前端 toast 拦截+后端 verify 校验 role in (agent,shooter) 否则拒绝);已验证用户显示"当前:xx,可更改",按钮文案"确认身份并换绑新手机号"
+- **存储**:verify 落库 role;POST /api/auth/profile 也接受 role(我的页随时切换);user_row 返回 role
+- **我的页**:身份徽标(经纪人绿/拍摄蓝/未选金色"选择身份›"链到验证页);发布页对 shooter 显示轻提示(去任务大厅接单/切换身份入口)——软引导不封锁功能,避免破坏现有流程
+- **注意**:文档 click 委托里 data-role 处理要放在 data-act 为空分支(选择卡不是 data-act)
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
