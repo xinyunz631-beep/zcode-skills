@@ -86,6 +86,11 @@ The first user-facing sentence must start with:
 - **首页统计卡可点**:hero-stats 三个 div 加 data-go(#/houses #/tasks #/agentslist)+cursor:pointer(点击委托 data-go 已有,无需新代码)
 - **#/agentslist 公开列表页**:pageAgentsList(复用 agentCard,空态引导去我的注册);route map + loadForRoute 拉 /api/agents 存 CACHE.agents;区别于 #/agents(本人资料管理);用户改主意要公开名单了,和 09-29"仅本人"不冲突——菜单入口管自己,首页统计管公开
 - **坑**:IAB 受控标签会变 about:blank(前轮 deliverable 释放),截图前必须重新 list+get,否则黑屏;用户正在用的页签别 claim,开新 tab 验证
+## 经纪人-商铺自动关联(10-04 三)
+
+- **用户问"关联的商铺怎么没有"**:POST /api/shops 一直 broker_id=NULL,经纪人详情"他的商铺"按 h.brokerId===agent.id 匹配所以空;修:发布时查 agents WHERE user_id 取 broker_id 落库;历史无主商铺 UPDATE s SET broker_id=a.id FROM agents a WHERE s.broker_id IS NULL AND a.user_id IS NOT NULL 补挂
+- pageAgent 标题自适应:CACHE.agentMine.id===a.id → "我发布的商铺"(agent 路由 loadForRoute 现在也拉 /agents/mine)
+- 改 status 时记得同步 tags/desc 冗余字段(旧商铺 tags 还挂着"待审核"会误导);server 上 python 内嵌 SQL 用参数化传 json.dumps,别在 ssh 命令里硬拼引号
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
