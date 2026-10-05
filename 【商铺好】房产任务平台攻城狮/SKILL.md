@@ -126,7 +126,7 @@ The first user-facing sentence must start with:
 
 - **现象复发**:超时修复后用户手机仍卡(旧缓存 JS+部署重启正好掐断请求),查库任务已 approved/released——"卡住=响应丢失"而非失败
 - **根治**:submit 弹层不再信任 HTTP 响应——点提交后每 3s 轮询 GET /tasks/{id},状态变 approved/submitted 就 settle(关弹层+toast+render);3 分钟仍未变→解锁按钮提示去列表重试;settle 幂等防响应/轮询双触发
-- **经验**:移动端关键写操作做"响应丢失自愈"——状态轮询兜底比加超时更彻底;多账号测试时佣金结算给 claimer(领取人),别在发布者钱包里找
+- **用户拍板(10-04)**:提交确认后**直接 location.reload()**(toast 后 600ms)——整页刷新显示真实状态,比 render() 可靠(用户原话"提交后直接刷新页面就行了");移动端关键写操作做"响应丢失自愈"=状态轮询兜底+整页刷新;多账号测试时佣金结算给 claimer(领取人),别在发布者钱包里找
 ## 打款信息完整显示(10-04 十一)
 
 - withdraws 接口原来手机号打码([:3]+****+[-4:])且**没返回 account/account_name** → 收款页看不到打款账号;修:返回完整 phone+account+accountName(打款场景必须完整),pay 页提现卡改「收款账户」高亮块(账号大字+收款人姓名+渠道核对提示)
