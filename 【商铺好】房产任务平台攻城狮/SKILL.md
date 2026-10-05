@@ -96,6 +96,12 @@ The first user-facing sentence must start with:
 - **根因**:verify 每次登录都生成新 token 覆盖 → 多设备/双页签场景,第二处登录顶掉第一处 → 旧页签全部 API 报"请先完成手机号验证"+页面加载失败
 - **修**:verify 对已有用户**保留原 token**(token = rows[0].token or 新),不再轮换;新用户才发新 token
 - **前端兜底**:api() 收到 未登录/请先完成手机号验证 且本地有 token → 自动降级 store.auth={smsOk:false}+save;loadMe 检测到降级→toast「登录已失效」+render() 翻到未验证 UI(否则页面残留"已验证"假象,点发布才炸,用户懵)
+## 角色硬隔离(10-04 五,用户要求)
+
+- **规则**:agent=经纪人(可发商铺+发任务,**不可领取任务**);shooter=拍摄的人(只能看/领任务,**商铺全隐藏+不可发布**);访客(未登录/未选身份)不限制浏览
+- **后端**:POST /api/shops 与 /api/tasks 加 role!=='agent' 拒绝;claim 加 role!=='shooter' 拒绝(同时修了 claim 无登录时 claim_uid 逻辑)
+- **前端**:myRole() 工具(smsOk+role);paintChrome 按角色隐藏 tabbar(shooter 藏 铺+发布);render() 对 shooter 访问 houses/house/publish 重定向 #/tasks;pageHome 拍摄者变体(标题/文案/隐藏在架商铺统计+热门商铺+商铺出租入口,经纪人资料cat→经纪人列表);pageMine shooter 隐藏经纪人资料菜单;pageTask 领取按钮对 agent 显示禁用态"经纪人身份·不可领取任务"
+- **验证注意**:IAB 测试 tab 注入 token 后同源 localStorage 共享,注入过期 token 会自动降级成访客视角(全功能),别误判成 gating 失效——先确认注入的是当前有效 token
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
