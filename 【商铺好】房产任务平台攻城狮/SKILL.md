@@ -95,7 +95,7 @@ The first user-facing sentence must start with:
 
 - **根因**:verify 每次登录都生成新 token 覆盖 → 多设备/双页签场景,第二处登录顶掉第一处 → 旧页签全部 API 报"请先完成手机号验证"+页面加载失败
 - **修**:verify 对已有用户**保留原 token**(token = rows[0].token or 新),不再轮换;新用户才发新 token
-- **前端兜底**:api() 收到 未登录/请先完成手机号验证 且本地有 token → 自动降级 store.auth={smsOk:false}+save,页面变未验证态引导重新验证,不再死循环报错
+- **前端兜底**:api() 收到 未登录/请先完成手机号验证 且本地有 token → 自动降级 store.auth={smsOk:false}+save;loadMe 检测到降级→toast「登录已失效」+render() 翻到未验证 UI(否则页面残留"已验证"假象,点发布才炸,用户懵)
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
