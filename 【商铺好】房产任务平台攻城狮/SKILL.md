@@ -122,6 +122,11 @@ The first user-facing sentence must start with:
 
 - **链路**:H5 提现弹窗(仅提现场)加 收款账户+收款人姓名 两输入框(必填,前后端双校验:账号3-60/姓名2-30)→ /api/wallet/withdraw {account,accountName} → wallet_flows 加 account/account_name 两列(add_flow 扩参);flow_row 返回
 - **展示**:收款页提现卡「收款:账号(姓名)」+核对提示;控制台钱包·提现表加收款账户列(旧单显示"未填写"——旧提现单没有此信息,驳回让用户重提)
+## 弹层自愈轮询(10-04 十,卡死二连根治)
+
+- **现象复发**:超时修复后用户手机仍卡(旧缓存 JS+部署重启正好掐断请求),查库任务已 approved/released——"卡住=响应丢失"而非失败
+- **根治**:submit 弹层不再信任 HTTP 响应——点提交后每 3s 轮询 GET /tasks/{id},状态变 approved/submitted 就 settle(关弹层+toast+render);3 分钟仍未变→解锁按钮提示去列表重试;settle 幂等防响应/轮询双触发
+- **经验**:移动端关键写操作做"响应丢失自愈"——状态轮询兜底比加超时更彻底;多账号测试时佣金结算给 claimer(领取人),别在发布者钱包里找
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
