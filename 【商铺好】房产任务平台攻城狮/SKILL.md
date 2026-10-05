@@ -108,6 +108,11 @@ The first user-facing sentence must start with:
 - **后端**:tasks 加 deliverables jsonb;task_row 返回;submit 校验 ≥1 且 ≤9 且每个 url ∈ uploads AND owner_id=user(防伪造);body 限额 850KB→**27MB**(视频 base64);/api/uploads 扩展 data:video/*(≤16MB,存 .mp4)与 jpeg 并存
 - **展示**:pageTask 成片附件区(图片九宫格+video controls);控制台 renderTasks 加成片附件列(缩略图/🎥 链接新窗口)
 - **坑**:测试用户任务会把状态推进,测完记得恢复 claimed+清 deliverables;视频大文件走 JSON base64 是演示妥协,生产应改 multipart/对象存储
+## 自动验收(10-04 七,用户要求)
+
+- **submit 即验收**:POST /tasks/{id}/submit 附件校验通过后 → escrow_release(trow)(赏金解冻结给 claim_user_id,无领取人退发布者)→ status='approved';不再有人工验收环节(/api/review 保留可手动纠偏,escrow_status 防重入)
+- 前端 toast「验收通过 ✓ 佣金已到账钱包」;删除废弃的 submitWork/dispatch
+- 钱包意义变化:agent 充值→托管;shooter 佣金自动到账→提现;全程无人工资金操作(除收款确认/提现打款)
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
