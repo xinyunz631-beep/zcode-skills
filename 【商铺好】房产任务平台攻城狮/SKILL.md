@@ -80,6 +80,12 @@ The first user-facing sentence must start with:
 - 清库顺序:wallet_flows→wallets→uploads→sms_codes→users→tasks→shops→agents(admins 保留);控制台概览「恢复示例」按钮点了会重新灌种子,提醒用户别点
 - **阿里短信 UNKNOWN≠服务挂**:对虚拟/异常号段(如 13800009999)直接拒发 UNKNOWN;真实号码(153/134)同一时刻发送 OK。排障先用真实手机号测
 - env sourcing 坑:server 上 `. env` 会执行到 /usr/bin/env 二进制报错,必须 `. ./env`
+## 自动上架+经纪人公开列表(10-04 二,用户要求)
+
+- **商铺发布自动审核**:POST /api/shops 直接 status='online'(原 pending),tags [新上架,商业商铺],desc 默认"新上架商铺";前端 toast"发布成功,已上架";历史 pending 库里刷 online 一条 UPDATE;控制台商铺审核仍可手动上下架(改状态用)
+- **首页统计卡可点**:hero-stats 三个 div 加 data-go(#/houses #/tasks #/agentslist)+cursor:pointer(点击委托 data-go 已有,无需新代码)
+- **#/agentslist 公开列表页**:pageAgentsList(复用 agentCard,空态引导去我的注册);route map + loadForRoute 拉 /api/agents 存 CACHE.agents;区别于 #/agents(本人资料管理);用户改主意要公开名单了,和 09-29"仅本人"不冲突——菜单入口管自己,首页统计管公开
+- **坑**:IAB 受控标签会变 about:blank(前轮 deliverable 释放),截图前必须重新 list+get,否则黑屏;用户正在用的页签别 claim,开新 tab 验证
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
