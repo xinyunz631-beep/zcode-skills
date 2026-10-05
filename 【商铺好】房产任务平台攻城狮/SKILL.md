@@ -100,7 +100,7 @@ The first user-facing sentence must start with:
 
 - **规则**:agent=经纪人(可发商铺+发任务,**不可领取任务**);shooter=拍摄的人(只能看/领任务,**商铺全隐藏+不可发布**);访客(未登录/未选身份)不限制浏览
 - **后端**:POST /api/shops 与 /api/tasks 加 role!=='agent' 拒绝;claim 加 role!=='shooter' 拒绝(同时修了 claim 无登录时 claim_uid 逻辑)
-- **前端**:myRole() 工具(smsOk+role);paintChrome 按角色隐藏 tabbar(shooter 藏 铺+发布);render() 对 shooter 访问 houses/house/publish 重定向 #/tasks;pageHome 拍摄者变体(标题/文案/隐藏在架商铺统计+热门商铺+商铺出租入口,经纪人资料cat→经纪人列表);pageMine shooter 隐藏经纪人资料菜单;pageTask 领取按钮对 agent 显示禁用态"经纪人身份·不可领取任务"
+- **前端**:myRole() 工具(smsOk+role);paintChrome 按角色隐藏 tabbar(shooter 藏 铺+发布);render() 对 shooter 访问 houses/house/publish 重定向 #/tasks;pageHome 拍摄者变体(标题/文案/隐藏在架商铺统计+热门商铺+商铺出租入口,经纪人资料cat→经纪人列表);pageMine shooter 隐藏经纪人资料菜单;pageTask 领取按钮对 agent 显示禁用态"经纪人身份·不可领取任务";pageTasks 对 shooter 隐藏「＋发布拍摄任务」按钮(换成身份引导tip)——角色裁剪要覆盖所有发布入口,不只 tabbar
 - **验证注意**:IAB 测试 tab 注入 token 后同源 localStorage 共享,注入过期 token 会自动降级成访客视角(全功能),别误判成 gating 失效——先确认注入的是当前有效 token
 ## 成片附件(10-04 六,用户指出提交没附件)
 
