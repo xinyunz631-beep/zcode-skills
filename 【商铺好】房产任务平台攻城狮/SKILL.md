@@ -91,6 +91,11 @@ The first user-facing sentence must start with:
 - **用户问"关联的商铺怎么没有"**:POST /api/shops 一直 broker_id=NULL,经纪人详情"他的商铺"按 h.brokerId===agent.id 匹配所以空;修:发布时查 agents WHERE user_id 取 broker_id 落库;历史无主商铺 UPDATE s SET broker_id=a.id FROM agents a WHERE s.broker_id IS NULL AND a.user_id IS NOT NULL 补挂
 - pageAgent 标题自适应:CACHE.agentMine.id===a.id → "我发布的商铺"(agent 路由 loadForRoute 现在也拉 /agents/mine)
 - 改 status 时记得同步 tags/desc 冗余字段(旧商铺 tags 还挂着"待审核"会误导);server 上 python 内嵌 SQL 用参数化传 json.dumps,别在 ssh 命令里硬拼引号
+## 会话稳定性(10-04 四,修"已认证却提示未验证")
+
+- **根因**:verify 每次登录都生成新 token 覆盖 → 多设备/双页签场景,第二处登录顶掉第一处 → 旧页签全部 API 报"请先完成手机号验证"+页面加载失败
+- **修**:verify 对已有用户**保留原 token**(token = rows[0].token or 新),不再轮换;新用户才发新 token
+- **前端兜底**:api() 收到 未登录/请先完成手机号验证 且本地有 token → 自动降级 store.auth={smsOk:false}+save,页面变未验证态引导重新验证,不再死循环报错
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
