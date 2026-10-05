@@ -118,6 +118,10 @@ The first user-facing sentence must start with:
 - **现象**:手机上传成片后弹层永远"上传提交中…"——但服务端其实已成功(auto-approve+release);iOS 浏览器 fetch 无默认超时,响应丢失就永久挂起
 - **修**:api() 加 AbortController 超时(默认 30s;上传/提交类调用传 120s),AbortError 转义"网络超时,请检查网络后重试";submit 幂等(重提 approved 任务:escrow_release 有 escrow_status 防重入,不会重复打款)
 - **教训**:移动端所有 fetch 必须显式超时;"卡住但后台已成功"的判据=查库里任务状态/流水,别急着改代码加功能
+## 提现收款账户(10-04 九,补测试报告缺口#1)
+
+- **链路**:H5 提现弹窗(仅提现场)加 收款账户+收款人姓名 两输入框(必填,前后端双校验:账号3-60/姓名2-30)→ /api/wallet/withdraw {account,accountName} → wallet_flows 加 account/account_name 两列(add_flow 扩参);flow_row 返回
+- **展示**:收款页提现卡「收款:账号(姓名)」+核对提示;控制台钱包·提现表加收款账户列(旧单显示"未填写"——旧提现单没有此信息,驳回让用户重提)
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
