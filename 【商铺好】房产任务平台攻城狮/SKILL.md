@@ -127,6 +127,11 @@ The first user-facing sentence must start with:
 - **现象复发**:超时修复后用户手机仍卡(旧缓存 JS+部署重启正好掐断请求),查库任务已 approved/released——"卡住=响应丢失"而非失败
 - **根治**:submit 弹层不再信任 HTTP 响应——点提交后每 3s 轮询 GET /tasks/{id},状态变 approved/submitted 就 settle(关弹层+toast+render);3 分钟仍未变→解锁按钮提示去列表重试;settle 幂等防响应/轮询双触发
 - **经验**:移动端关键写操作做"响应丢失自愈"——状态轮询兜底比加超时更彻底;多账号测试时佣金结算给 claimer(领取人),别在发布者钱包里找
+## 打款信息完整显示(10-04 十一)
+
+- withdraws 接口原来手机号打码([:3]+****+[-4:])且**没返回 account/account_name** → 收款页看不到打款账号;修:返回完整 phone+account+accountName(打款场景必须完整),pay 页提现卡改「收款账户」高亮块(账号大字+收款人姓名+渠道核对提示)
+- **旧提现单无账户数据**:字段上线前的单子 account=NULL 显示"未填写",只能驳回让用户重提;上线后 account 必填
+- 用户手机缓存旧 pay.html 会看到旧模板,提醒强刷
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
