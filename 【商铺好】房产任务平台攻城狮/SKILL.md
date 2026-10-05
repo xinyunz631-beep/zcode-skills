@@ -113,6 +113,11 @@ The first user-facing sentence must start with:
 - **submit 即验收**:POST /tasks/{id}/submit 附件校验通过后 → escrow_release(trow)(赏金解冻结给 claim_user_id,无领取人退发布者)→ status='approved';不再有人工验收环节(/api/review 保留可手动纠偏,escrow_status 防重入)
 - 前端 toast「验收通过 ✓ 佣金已到账钱包」;删除废弃的 submitWork/dispatch
 - 钱包意义变化:agent 充值→托管;shooter 佣金自动到账→提现;全程无人工资金操作(除收款确认/提现打款)
+## 请求超时(10-04 八,修"上传提交中"卡死)
+
+- **现象**:手机上传成片后弹层永远"上传提交中…"——但服务端其实已成功(auto-approve+release);iOS 浏览器 fetch 无默认超时,响应丢失就永久挂起
+- **修**:api() 加 AbortController 超时(默认 30s;上传/提交类调用传 120s),AbortError 转义"网络超时,请检查网络后重试";submit 幂等(重提 approved 任务:escrow_release 有 escrow_status 防重入,不会重复打款)
+- **教训**:移动端所有 fetch 必须显式超时;"卡住但后台已成功"的判据=查库里任务状态/流水,别急着改代码加功能
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
