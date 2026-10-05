@@ -102,6 +102,12 @@ The first user-facing sentence must start with:
 - **后端**:POST /api/shops 与 /api/tasks 加 role!=='agent' 拒绝;claim 加 role!=='shooter' 拒绝(同时修了 claim 无登录时 claim_uid 逻辑)
 - **前端**:myRole() 工具(smsOk+role);paintChrome 按角色隐藏 tabbar(shooter 藏 铺+发布);render() 对 shooter 访问 houses/house/publish 重定向 #/tasks;pageHome 拍摄者变体(标题/文案/隐藏在架商铺统计+热门商铺+商铺出租入口,经纪人资料cat→经纪人列表);pageMine shooter 隐藏经纪人资料菜单;pageTask 领取按钮对 agent 显示禁用态"经纪人身份·不可领取任务"
 - **验证注意**:IAB 测试 tab 注入 token 后同源 localStorage 共享,注入过期 token 会自动降级成访客视角(全功能),别误判成 gating 失效——先确认注入的是当前有效 token
+## 成片附件(10-04 六,用户指出提交没附件)
+
+- **链路**:claimed → 「上传成片并提交验收」弹层(.cashier sheet):选图片(multiple,compressPhoto 压 ≤600KB jpeg)/选 MP4(≤16MB FileReader dataURL)→ 预览可删 → 逐个 POST /api/uploads → POST /tasks/{id}/submit {deliverables:[urls]} → status=submitted
+- **后端**:tasks 加 deliverables jsonb;task_row 返回;submit 校验 ≥1 且 ≤9 且每个 url ∈ uploads AND owner_id=user(防伪造);body 限额 850KB→**27MB**(视频 base64);/api/uploads 扩展 data:video/*(≤16MB,存 .mp4)与 jpeg 并存
+- **展示**:pageTask 成片附件区(图片九宫格+video controls);控制台 renderTasks 加成片附件列(缩略图/🎥 链接新窗口)
+- **坑**:测试用户任务会把状态推进,测完记得恢复 claimed+清 deliverables;视频大文件走 JSON base64 是演示妥协,生产应改 multipart/对象存储
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
