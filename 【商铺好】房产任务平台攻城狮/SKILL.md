@@ -136,6 +136,13 @@ The first user-facing sentence must start with:
 
 - 清:wallet_flows(27)/wallets/uploads/sms_codes/users/tasks/shops/agents + uploads 目录文件;**保留**:settings(收款码/收款链接/收款账号 5 条——真实生产配置,别删)、admins;SPH_NO_SEEDS=1 已在 env(不会自动回灌)
 - 上线前待办(用户确认):①admin 密码还是默认 Admin123;②收款确认页 key=xinyun08(用户自选,偏弱);③正式域名备案问题(UAT 域名 hellokitty-uat.yoursite.xin 是测试域)
+## 微信小程序(10-07,原生重写 lite 版)
+
+- **约束**:个人身份可注册小程序但①web-view 嵌 H5 需企业主体②无微信支付→只能原生重写;后端 API 直接复用零改动
+- **工程**:`撮房-H5演示/miniprogram/`(原生 WXML/WXSS,非 Taro);7 页:login(身份卡+短信)/home/tasks/task-detail(领取+wx.chooseMedia 上传成片→readFile base64→JSON /uploads 同 H5 接口)/wallet(余额流水+收款码充值)/mine/agents(本人资料)/publish(任务托管+商铺上架);tabBar 三页(首页/任务/我的),agent 发布入口在首页/我的
+- **后端适配**:①/api/uploads 接受 png/webp(imghdr 类型判断,扩展名对应)②新增 GET /api/wallet/payinfo(登录用户):把 settings 里 dataURL 收款码**持久化成静态文件**返回 URL(小程序 image 不支持 dataURL)+account+alipayLink
+- **小程序 API 特性**:wx.request timeout 参数自带;token 存 storage,401 语义自动 clearAuth;图片/视频 readFile base64(≤16MB 视频→21MB 字符串,可行)
+- **上线硬门槛**:request 合法域名要求 **ICP 备案域名**(UAT 测试域不行);开发期勾「不校验合法域名」真机预览;正式发布要用户注册小程序拿 AppID 填 project.config.json
 ## UAT 部署架构(HelloKitty UAT)
 
 ```text
